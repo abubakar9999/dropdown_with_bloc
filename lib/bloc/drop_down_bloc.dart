@@ -7,32 +7,54 @@ part 'drop_down_event.dart';
 part 'drop_down_state.dart';
 
 class DropDownBloc extends Bloc<DropDownEvent, DropDownState> {
-  DropDownBloc() : super(DropDownInitial()) {
+     List<String> category=[];
+     List<String> subcategory=[];
+     List<String> products=[];
 
-    Map<String, List<Map<String, dynamic>>> data;
+  DropDownBloc() : super(DropDownInitial()) {
     on<DataLoadedevent>((event, emit)  async{
       emit(DropDownlodingState());
-     List<String> category=[];
-      List subcetgory=[];
-      List products=[];
-
        await Future.delayed(Duration(seconds: 2), () { });
         try {
-          data = source;
-          data["categories"]!.forEach((e){
-            category.add(e['name']);
-
-          subcetgory=  e["subcategories"];
-
-          });
-          print(category);
+          category= source.keys.toList();
         } catch (e) {
           print("Somethis error");
         }
-     
-
-     print(category);
-      emit(DropDownLoaded(categorey: category , subcategory: subcetgory, product: products));
+   
+      emit(DropDownLoaded(categorey:category,));
     });
+    on<SelectedAndSubcategoryEvent>((event, emit) {
+      emit(DropDownLoaded(categorey:category,select: event.selectvalue));
+
+      source[event.selectvalue]!.forEach((element) {
+     subcategory.add(element.keys.toString());
+
+      });
+      print(subcategory);
+      if(event.selectvalue!=''){
+         emit(DropDownSubLoaded(subcategory: subcategory,));
+      }
+     
+  
+    });
+    on<SelectedAndproductEvent>((event, emit) {
+      emit(DropDownLoaded(categorey:category,select: event.selectvalue));
+      // for (var i = 0; i < source['Electronics']!.; i++) {
+        
+      // }
+source['Electronics']![0][event.selectvalue]!.forEach((e){
+  products.add(e['name']);
+});
+    
+      print(products);
+      if(event.selectvalue!=''){
+        
+       emit(DropDownproLoaded(product: products,));
+      }
+     
+  
+    });
+
+
   }
 }

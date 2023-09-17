@@ -8,11 +8,28 @@ abstract class DropDownState {}
  class DropDownlodingState extends DropDownState {}
 class DropDownLoaded extends DropDownState {
   List<String>  categorey;
-  List subcategory;
-  List product;
+  String? select;
+
   DropDownLoaded({
     required this.categorey,
+    this.select
+    
+  });
+ }
+
+class DropDownSubLoaded extends DropDownState {
+  List<String>  subcategory;
+   String? select;
+  DropDownSubLoaded({
     required this.subcategory,
+     this.select
+  });
+ }
+class DropDownproLoaded extends DropDownState {
+  List<String>  product;
+
+  DropDownproLoaded({
     required this.product,
+ 
   });
  }
